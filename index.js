@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
+const productRouter = require('./routes/product.routes');
+
 require('dotenv/config');
 
 const app = express();
@@ -13,9 +15,14 @@ const PORT = process.env.SERVER_PORT || 3000;
 app.use(express.json());
 app.use(morgan('tiny'));
 
-app.get(`${PREFIX}/v1`, (req, res) => {
+
+// hello route
+app.get(`${PREFIX}`, (req, res) => {
     res.send({message: 'Hello World!'});
 });
+
+// routes
+app.use(`${PREFIX}/v1/products`, productRouter);
 
 mongoose.connect(`${process.env.MONGODB_URL}?directConnection=true&authSource=admin&retryWrites=true`, {
     dbName: process.env.MONGODB_DB_NAME,
