@@ -1,7 +1,7 @@
-### CATEGORY
+### CATEGORY ###
 ###
 
-# @name get category
+# @name get categories
 GET {{host}}/{{apiPrefix}}/v1/categories
 Accept: application/json
 ###
@@ -35,4 +35,68 @@ Content-Type: application/json
 
 # @name delete category by id
 DELETE {{host}}/{{apiPrefix}}/v1/categories/6662baba0fa17126e55ae8d2
+###
+
+### PRODUCT ###
+###
+
+# @name get products
+GET {{host}}/{{apiPrefix}}/v1/products?categories=6662b82439fd3040bef8f7e0
+Accept: application/json
+###
+
+# @name get featured products
+GET {{host}}/{{apiPrefix}}/v1/products/featured/2
+Accept: application/json
+###
+
+# @name get product by id
+GET {{host}}/{{apiPrefix}}/v1/products/6662de275eefc5d955227f7e
+Accept: application/json
+###
+
+# @name add product
+POST {{host}}/{{apiPrefix}}/v1/products
+Content-Type: application/json
+
+{
+  "name": "MacBook 2020 15\"",
+  "description": "Brand new Apple MacBook Pro 2020 with touch bar",
+  "richDescription": "<b>Best In class, Great choice for gifts</b>",
+  "image": "",
+  "brand": "Apple",
+  "price": 150,
+  "category": "6662b82439fd3040bef8f7e0",
+  "countInStock": 0,
+  "rating": 4,
+  "numReviews": 0,
+  "isFeatured": false
+}
+###
+
+# @name update product by id
+PUT {{host}}/{{apiPrefix}}/v1/products/6662deba29b147baa88af909
+Content-Type: application/json
+
+{
+  "name": "MacBook 2020 17\"",
+  "description": "Brand new Apple MacBook Pro 2020 with touch bar",
+  "richDescription": "<b>Best In class, Great choice for productivity</b>",
+  "image": "",
+  "brand": "Apple",
+  "price": 150,
+  "category": "6662b82439fd3040bef8f7e0",
+  "countInStock": 0,
+  "rating": 4,
+  "numReviews": 0,
+  "isFeatured": true
+}
+###
+
+# @name delete product by id
+DELETE {{host}}/{{apiPrefix}}/v1/products/6662de275eefc5d955227f7e
+###
+
+# @name get products count
+GET {{host}}/{{apiPrefix}}/v1/products/count
 ###
