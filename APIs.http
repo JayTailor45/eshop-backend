@@ -1,0 +1,35 @@
+### GET CATEGORY
+GET {{host}}/{{apiPrefix}}/v1/categories
+Accept: application/json
+###
+
+### get category by id
+GET {{host}}/{{apiPrefix}}/v1/categories/6662bd0cc5b412be3ec843cb
+Accept: application/json
+###
+
+### add category
+POST {{host}}/{{apiPrefix}}/v1/categories
+Content-Type: application/json
+
+{
+  "name": "Computers",
+  "icon": "icon-computer",
+  "color": "#444"
+}
+###
+
+### update category
+PUT {{host}}/{{apiPrefix}}/v1/categories/6662c04264c0588d23b7536c
+Content-Type: application/json
+
+{
+  "name": "Wooden Hardware",
+  "icon": "icon-computer",
+  "color": "#555"
+}
+###
+
+### delete category
+DELETE {{host}}/{{apiPrefix}}/v1/categories/6662baba0fa17126e55ae8d2
+###
