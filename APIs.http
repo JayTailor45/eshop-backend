@@ -1,14 +1,17 @@
-### GET CATEGORY
+### CATEGORY
+###
+
+# @name get category
 GET {{host}}/{{apiPrefix}}/v1/categories
 Accept: application/json
 ###
 
-### get category by id
+# @name get category by id
 GET {{host}}/{{apiPrefix}}/v1/categories/6662bd0cc5b412be3ec843cb
 Accept: application/json
 ###
 
-### add category
+# @name add category
 POST {{host}}/{{apiPrefix}}/v1/categories
 Content-Type: application/json
 
@@ -19,7 +22,7 @@ Content-Type: application/json
 }
 ###
 
-### update category
+# @name update category by id
 PUT {{host}}/{{apiPrefix}}/v1/categories/6662c04264c0588d23b7536c
 Content-Type: application/json
 
@@ -30,6 +33,6 @@ Content-Type: application/json
 }
 ###
 
-### delete category
+# @name delete category by id
 DELETE {{host}}/{{apiPrefix}}/v1/categories/6662baba0fa17126e55ae8d2
 ###
