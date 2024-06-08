@@ -60,8 +60,55 @@ Accept: application/json
 
 # @name add product
 POST {{host}}/{{apiPrefix}}/v1/products
-Content-Type: application/json
 Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=boundary123
+
+--boundary123
+Content-Disposition: form-data; name="image"; filename="Macbook PNG 982x905.png"
+Content-Type: image/png
+
+< /Users/jay/Downloads/Macbook PNG 982x905.png
+--boundary123
+Content-Disposition: form-data; name="name"
+
+MacBook 2020 15"
+--boundary123--
+Content-Disposition: form-data; name="description"
+
+Brand new Apple MacBook Pro 2020 with touch bar
+--boundary123--
+Content-Disposition: form-data; name="richDescription"
+
+<b>Best In class, Great choice for gifts</b>
+--boundary123--
+Content-Disposition: form-data; name="brand"
+
+Apple
+--boundary123--
+Content-Disposition: form-data; name="price"
+
+150
+--boundary123--
+Content-Disposition: form-data; name="category"
+
+6662b82439fd3040bef8f7e0
+--boundary123--
+Content-Disposition: form-data; name="countInStock"
+
+100
+--boundary123--
+Content-Disposition: form-data; name="rating"
+
+4
+--boundary123--
+Content-Disposition: form-data; name="numReviews"
+
+0
+--boundary123--
+Content-Disposition: form-data; name="isFeatured"
+
+false
+--boundary123--
 
 {
   "name": "MacBook 2020 15\"",

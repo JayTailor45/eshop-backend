@@ -31,17 +31,24 @@ exports.addProduct = async (req, res, next) => {
             return res.status(404).send('Invalid Category Id');
         }
 
+        if (!req.file) {
+            return res.status(400).send('Product image is required');
+        }
+
         const category = await Category.findById(body.category);
 
         if (!category) {
             return res.status(404).send('Invalid Category');
         }
 
+        const fileName = req.file.filename;
+        const basePath = `${req.protocol}://${req.get('host')}/public/upload/`
+
         let product = new Product({
             name: body.name,
             description: body.description,
             richDescription: body.richDescription,
-            image: body.image,
+            image: `${basePath}${fileName}`,
             brand: body.brand,
             price: body.price,
             category: body.category,
@@ -109,11 +116,29 @@ exports.updateProduct = async (req, res) => {
             return res.status(404).send('Invalid Category');
         }
 
+        const existingProduct = await Product.findById(req.params.id);
+
+        if(!existingProduct) {
+            return res.status(404).send('Invalid Product');
+        }
+
+        const file = req.file;
+
+        let imagePath;
+
+        if(file) {
+            const fileName = file.filename;
+            const basePath = `${req.protocol}://${req.get('host')}/public/upload/`;
+            imagePath = `${basePath}${fileName}`
+        } else {
+            imagePath = existingProduct.image;
+        }
+
         const product = await Product.findByIdAndUpdate(req.params.id, {
             name: body.name,
             description: body.description,
             richDescription: body.richDescription,
-            image: body.image,
+            image: imagePath,
             brand: body.brand,
             price: body.price,
             category: body.category,
