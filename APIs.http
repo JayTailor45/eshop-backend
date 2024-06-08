@@ -177,3 +177,76 @@ Authorization: Bearer {{auth_token}}
 GET {{host}}/{{apiPrefix}}/v1/users/count
 Authorization: Bearer {{auth_token}}
 ###
+
+### Order ###
+###
+
+# @name get orders
+GET {{host}}/{{apiPrefix}}/v1/orders
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+###
+
+# @name get order
+GET {{host}}/{{apiPrefix}}/v1/orders/666429b83845ec28bb7b400f
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+###
+
+# @name create order
+POST {{host}}/{{apiPrefix}}/v1/orders
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "orderItems": [
+    {
+      "quantity": 5,
+      "product": "66640f82d60952b5be2c39cd"
+    },
+    {
+      "quantity": 2,
+      "product": "6662deba29b147baa88af909"
+    }
+  ],
+  "shippingAddress1": "Shipping Address 1",
+  "shippingAddress2": "Shipping Address 2",
+  "city": "My City",
+  "zip": "123123",
+  "country": "India",
+  "phone": "9988997766",
+  "status": "Pending",
+  "totalPrice": 100,
+  "user": "6663e7d510690eadb280dd19"
+}
+###
+
+# @name update order status
+PUT {{host}}/{{apiPrefix}}/v1/orders/666429b83845ec28bb7b400f
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "status": "Shipped"
+}
+###
+
+# @name delete order by id
+DELETE {{host}}/{{apiPrefix}}/v1/orders/666429b83845ec28bb7b400f
+Authorization: Bearer {{auth_token}}
+###
+
+# @name get total sales
+GET {{host}}/{{apiPrefix}}/v1/orders/total-sales
+Authorization: Bearer {{auth_token}}
+###
+
+# @name get order count
+GET {{host}}/{{apiPrefix}}/v1/orders/count
+Authorization: Bearer {{auth_token}}
+###
+
+# @name get user order
+GET {{host}}/{{apiPrefix}}/v1/orders/user/6663e7d510690eadb280dd19
+Authorization: Bearer {{auth_token}}
+###
