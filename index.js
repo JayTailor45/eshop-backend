@@ -2,6 +2,9 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
+const authJwt = require('./helpers/jwt');
+const errorHandler = require('./helpers/error-handler');
+
 const productRouter = require('./routes/product.routes');
 const categoryRouter = require('./routes/category.routes');
 const userRouter = require('./routes/user.routes');
@@ -16,6 +19,8 @@ const PORT = process.env.SERVER_PORT || 3000;
 // middlewares
 app.use(express.json());
 app.use(morgan('tiny'));
+app.use(authJwt());
+app.use(errorHandler);
 
 
 // hello route

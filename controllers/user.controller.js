@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const {User} = require("../models/user.model");
 
@@ -77,6 +78,21 @@ exports.getUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     try {
         const body = req.body;
+
+        const userExists = await User.findById(req.params.id);
+        if(!userExists) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        let password;
+        if(body.password) {
+            password = bcrypt.hashSync(body.password, 10);
+        } else {
+            password = userExists.passwordHash;
+        }
+
         const user = await User.findByIdAndUpdate(req.params.id, {
             name: body.name,
             street: body.street,
@@ -86,12 +102,60 @@ exports.updateUser = async (req, res) => {
             country: body.country,
             phone: body.phone,
         }, {new: true});
+
         if (!user) {
             return res.status(404).json({
                 message: "User not found"
             });
         }
+
         return res.status(200).json(user);
+    } catch (error) {
+        return res.status(500).json({error});
+    }
+}
+
+exports.login = async (req, res, next) => {
+    try {
+        const body = req.body;
+        const user = await User.findOne({email: body.email});
+
+        if (!user) {
+            return res.status(400).json({
+                message: 'User not found'
+            });
+        }
+
+        if (user && bcrypt.compareSync(body.password, user.passwordHash)) {
+
+            const token = jwt.sign({
+                    userId: user.id,
+                    isAdmin: user.isAdmin,
+                },
+                process.env.JWT_SECRET,
+                {expiresIn: '1d'}
+            );
+
+            res.status(200).send({user: user.email, token});
+        } else {
+            res.status(200).send('Password is incorrect');
+        }
+
+        res.status(201).send(user);
+    } catch (error) {
+        next(error);
+    }
+}
+
+exports.getUserCount = async (req, res) => {
+    try {
+        const userCount = await User.countDocuments({}).exec();
+        if (!userCount) {
+            return res.status(500).json({
+                success: false
+            });
+        }
+        return res.status(200).json({userCount,});
     } catch (error) {
         return res.status(500).json({error});
     }

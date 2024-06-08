@@ -14,6 +14,7 @@ Accept: application/json
 # @name add category
 POST {{host}}/{{apiPrefix}}/v1/categories
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "Computers",
@@ -25,6 +26,7 @@ Content-Type: application/json
 # @name update category by id
 PUT {{host}}/{{apiPrefix}}/v1/categories/6662c04264c0588d23b7536c
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "Wooden Hardware",
@@ -35,6 +37,7 @@ Content-Type: application/json
 
 # @name delete category by id
 DELETE {{host}}/{{apiPrefix}}/v1/categories/6662baba0fa17126e55ae8d2
+Authorization: Bearer {{auth_token}}
 ###
 
 ### PRODUCT ###
@@ -58,6 +61,7 @@ Accept: application/json
 # @name add product
 POST {{host}}/{{apiPrefix}}/v1/products
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "MacBook 2020 15\"",
@@ -77,6 +81,7 @@ Content-Type: application/json
 # @name update product by id
 PUT {{host}}/{{apiPrefix}}/v1/products/6662deba29b147baa88af909
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "name": "MacBook 2020 17\"",
@@ -95,10 +100,12 @@ Content-Type: application/json
 
 # @name delete product by id
 DELETE {{host}}/{{apiPrefix}}/v1/products/6662de275eefc5d955227f7e
+Authorization: Bearer {{auth_token}}
 ###
 
 # @name get products count
 GET {{host}}/{{apiPrefix}}/v1/products/count
+Authorization: Bearer {{auth_token}}
 ###
 
 ### USER ###
@@ -107,15 +114,28 @@ GET {{host}}/{{apiPrefix}}/v1/products/count
 # @name get users
 GET {{host}}/{{apiPrefix}}/v1/users
 Accept: application/json
+Authorization: Bearer {{auth_token}}
+###
+
+# @name login user
+POST {{host}}/{{apiPrefix}}/v1/users/login
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "password": "Password@1"
+}
+> {% client.global.set("auth_token", response.body.token); %}
 ###
 
 # @name get users by id
 GET {{host}}/{{apiPrefix}}/v1/users/6663ea3bf4bacd90033e21cf
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 ###
 
-# @name add user
-POST {{host}}/{{apiPrefix}}/v1/users
+# @name register user
+POST {{host}}/{{apiPrefix}}/v1/users/register
 Content-Type: application/json
 
 {
@@ -134,6 +154,7 @@ Content-Type: application/json
 
 # @name update users by id
 PUT {{host}}/{{apiPrefix}}/v1/users/6663ea3bf4bacd90033e21cf
+Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 {
@@ -149,4 +170,10 @@ Content-Type: application/json
 
 # @name delete user by id
 DELETE {{host}}/{{apiPrefix}}/v1/users/6663ea3bf4bacd90033e21cf
+Authorization: Bearer {{auth_token}}
+###
+
+# @name get users count
+GET {{host}}/{{apiPrefix}}/v1/users/count
+Authorization: Bearer {{auth_token}}
 ###
