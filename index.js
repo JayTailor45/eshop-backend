@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const productRouter = require('./routes/product.routes');
 const categoryRouter = require('./routes/category.routes');
+const userRouter = require('./routes/user.routes');
 
 require('dotenv/config');
 
@@ -25,6 +26,7 @@ app.get(`${PREFIX}`, (req, res) => {
 // routes
 app.use(`${PREFIX}/v1/products`, productRouter);
 app.use(`${PREFIX}/v1/categories`, categoryRouter);
+app.use(`${PREFIX}/v1/users`, userRouter);
 
 mongoose.connect(`${process.env.MONGODB_URL}?directConnection=true&authSource=admin&retryWrites=true`, {
     dbName: process.env.MONGODB_DB_NAME,
