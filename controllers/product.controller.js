@@ -42,7 +42,7 @@ exports.addProduct = async (req, res, next) => {
         }
 
         const fileName = req.file.filename;
-        const basePath = `${req.protocol}://${req.get('host')}/public/upload/`
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
 
         let product = new Product({
             name: body.name,
@@ -118,7 +118,7 @@ exports.updateProduct = async (req, res) => {
 
         const existingProduct = await Product.findById(req.params.id);
 
-        if(!existingProduct) {
+        if (!existingProduct) {
             return res.status(404).send('Invalid Product');
         }
 
@@ -126,9 +126,9 @@ exports.updateProduct = async (req, res) => {
 
         let imagePath;
 
-        if(file) {
+        if (file) {
             const fileName = file.filename;
-            const basePath = `${req.protocol}://${req.get('host')}/public/upload/`;
+            const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
             imagePath = `${basePath}${fileName}`
         } else {
             imagePath = existingProduct.image;
@@ -184,5 +184,37 @@ exports.getFeaturedProducts = async (req, res, next) => {
         res.status(200).json(products);
     } catch (error) {
         next(error);
+    }
+}
+
+exports.updateProductGalleryImages = async (req, res) => {
+    try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(404).send('Invalid Product Id');
+        }
+
+        const files = req.files;
+        let imagePaths = [];
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+
+        if (files) {
+            files.forEach(file => {
+                imagePaths.push(`${basePath}${file.filename}`);
+            });
+        }
+
+        const product = await Product.findByIdAndUpdate(req.params.id, {
+            images: imagePaths,
+        }, {new: true});
+
+        if (!product) {
+            return res.status(500).json({
+                message: "Product not found"
+            });
+        }
+
+        return res.status(200).json(product);
+    } catch (error) {
+        return res.status(500).json({error});
     }
 }

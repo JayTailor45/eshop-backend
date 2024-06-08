@@ -11,6 +11,7 @@ const userRouter = require('./routes/user.routes');
 const orderRouter = require('./routes/order.routes');
 
 require('dotenv/config');
+const path = require("node:path");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(morgan('tiny'));
 app.use(authJwt());
 app.use(errorHandler);
+app.use('/public/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 
 // hello route

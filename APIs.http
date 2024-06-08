@@ -124,6 +124,18 @@ false
   "isFeatured": false
 }
 ###
+# @name add gallery images to product
+PUT {{host}}/{{apiPrefix}}/v1/products/gallery-images/6662b82439fd3040bef8f7e0
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=boundary123
+
+--boundary123
+Content-Disposition: form-data; name="images"; filename="Macbook PNG 982x905.png"
+Content-Type: image/png
+
+< /Users/jay/Downloads/Macbook PNG 982x905.png
+--boundary123--
+###
 
 # @name update product by id
 PUT {{host}}/{{apiPrefix}}/v1/products/6662deba29b147baa88af909

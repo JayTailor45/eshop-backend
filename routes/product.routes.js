@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const isValidFile = FILE_TYPE_MAP[file.mimetype];
         let uploadError = new Error('Invalid Image Type');
-        if(isValidFile) {
+        if (isValidFile) {
             uploadError = null;
         }
         cb(null, 'public/uploads');
@@ -44,5 +44,6 @@ router.get('/:id', productController.getProduct);
 
 router.put('/:id', productController.updateProduct);
 
+router.put('/gallery-images/:id', uploadOptions.array('images', 8), productController.updateProductGalleryImages);
 
 module.exports = router;
