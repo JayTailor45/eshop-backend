@@ -29,6 +29,22 @@ services:
       ME_CONFIG_BASICAUTH_USERNAME: admin
       ME_CONFIG_BASICAUTH_PASSWORD: admin
 
+  eshop-backend:
+    container_name: eshop-backend
+    command: npm start
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    volumes:
+      - ./public:/home/app/public
+    depends_on:
+      - eshop-mongo-db
+
 volumes:
   eshop-mongo-data:
     driver: local

@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+.env
+.env-example
+docker-compose.yml
+
+APIs.http
+http-client.env.json
