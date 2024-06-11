@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const authJwt = require('./helpers/jwt');
 const errorHandler = require('./helpers/error-handler');
@@ -19,6 +20,10 @@ const PREFIX = process.env.API_PREFIX || '/api';
 const PORT = process.env.SERVER_PORT || 3000;
 
 // middlewares
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
 app.use(express.json());
 app.use(morgan('tiny'));
 app.use(authJwt());
