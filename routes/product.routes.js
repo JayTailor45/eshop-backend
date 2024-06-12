@@ -42,7 +42,7 @@ router.get('/count', productController.getProductCount);
 
 router.get('/:id', productController.getProduct);
 
-router.put('/:id', productController.updateProduct);
+router.put('/:id', uploadOptions.single('image'), productController.updateProduct);
 
 router.put('/gallery-images/:id', uploadOptions.array('images', 8), productController.updateProductGalleryImages);
 
