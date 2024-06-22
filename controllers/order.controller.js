@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const {Order} = require("../models/order.model");
 const {OrderItem} = require("../models/orderItem.model");
+const {Product} = require("../models/product.model");
 
 exports.getOrders = async (req, res, next) => {
     try {
@@ -11,8 +13,7 @@ exports.getOrders = async (req, res, next) => {
 
         if (!orders) {
             res.status(404).send({
-                status: false,
-                message: 'Orders not Found',
+                status: false, message: 'Orders not Found',
             });
         }
         res.status(200).json(orders);
@@ -27,8 +28,7 @@ exports.addOrder = async (req, res, next) => {
 
         const orderItemIds = Promise.all(body.orderItems.map(async orderItem => {
             let newOrderItem = new OrderItem({
-                quantity: orderItem.quantity,
-                product: orderItem.product,
+                quantity: orderItem.quantity, product: orderItem.product,
             });
 
             newOrderItem = await newOrderItem.save();
@@ -39,8 +39,7 @@ exports.addOrder = async (req, res, next) => {
         const orderItemIdsResolved = await orderItemIds;
 
         const orderItemsFromDb = (await OrderItem.find({_id: orderItemIdsResolved,})
-                .populate('product', 'price')
-        );
+            .populate('product', 'price'));
 
         const totalPrice = orderItemsFromDb.reduce((acc, item) => {
             return acc + (item.product.price * item.quantity);
@@ -115,13 +114,9 @@ exports.getOrder = async (req, res) => {
 exports.updateOrderStatus = async (req, res) => {
     try {
         const body = req.body;
-        const order = await Order.findByIdAndUpdate(
-            req.params.id,
-            {
-                status: body.status,
-            },
-            {new: true},
-        );
+        const order = await Order.findByIdAndUpdate(req.params.id, {
+            status: body.status,
+        }, {new: true},);
 
         if (!order) {
             return res.status(404).send('Invalid Order Id');
@@ -134,9 +129,7 @@ exports.updateOrderStatus = async (req, res) => {
 
 exports.getTotalSales = async (req, res) => {
     try {
-        const totalSales = await Order.aggregate([
-            { $group: { _id: null, totalSales: { $sum: '$totalPrice'}}}
-        ]);
+        const totalSales = await Order.aggregate([{$group: {_id: null, totalSales: {$sum: '$totalPrice'}}}]);
         return res.status(200).json({totalSales: totalSales?.pop()?.totalSales || 0});
     } catch (error) {
         return res.status(500).json({error});
@@ -167,11 +160,50 @@ exports.getUserOrders = async (req, res, next) => {
 
         if (!orders) {
             res.status(404).send({
-                status: false,
-                message: 'Orders not Found',
+                status: false, message: 'Orders not Found',
             });
         }
         res.status(200).json(orders);
+    } catch (error) {
+        next(error);
+    }
+}
+
+exports.createCheckoutSession = async (req, res, next) => {
+    try {
+        const orderItems = req.body;
+
+        if (orderItems === null || orderItems.length === 0) {
+            return res.status(400).send('Checkout session cannot be created');
+        }
+
+        const productIds = orderItems.map(order => order.product);
+
+        const products = await Product.find({
+            '_id': {$in: productIds}
+        });
+
+        const lineItems = [];
+
+        (products || []).forEach(product => {
+            lineItems.push({
+                price_data: {
+                    currency: 'usd', product_data: {
+                        name: product.name,
+                    }, unit_amount: +product.price * 100,
+                }, quantity: orderItems.find(item => item.product === product.id)?.quantity
+            });
+        });
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: lineItems,
+            mode: 'payment',
+            success_url: process.env.STRIPE_PAYMENT_SUCCESS_URL,
+            cancel_url: process.env.STRIPE_PAYMENT_FAIL_URL,
+        });
+
+        res.status(200).json({id: session.id});
     } catch (error) {
         next(error);
     }
