@@ -1,8 +1,17 @@
 # E-shop backend
 
-The repository contains backend code for eshop / e-commerce application. Frontend code can be found [here](https://github.com/JayTailor45/mean-nx-eshop).
+The repository contains backend code for eshop / e-commerce application. Frontend code can be
+found [here](https://github.com/JayTailor45/mean-nx-eshop).
 
 This application contains all the routes which is used by admin app as well as client app.
+
+#### Frontend of the client facing app
+
+![Eshop Frontend](screenshots%2FEshop%20Frontend.jpeg)
+
+#### Frontend of the admin facing app
+
+![Eshop Admin Frontend](screenshots%2FScreenshot%202024-06-22%20at%205.53.00%E2%80%AFPM.png)
 
 ### Features:
 
@@ -43,3 +52,11 @@ This application contains all the routes which is used by admin app as well as c
 3. Copy `.env-example` and paste as `.env` and update env variables
 4. Run ```docker compose up -d```
 5. Add first admin use manually using **mongo express** at http://localhost:8081/db/eshop/users
+
+### DB Seed
+
+1. Run project
+2. Visit http://localhost:8081/db/eshop
+3. Import backup json files to respective collections
+4. Copy uploads directory from backup to public directory
+5. Verify the changes
